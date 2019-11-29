@@ -21,7 +21,7 @@ Compile the hardware in Quartus. This results in a bitstream exampleniossdram.so
 nios2-configure-sof -d 2 exampleniossdram.sof
 ~~~
 
-## Compiling the Nios-II software
+## Compiling and running the Nios-II software
 
 Run the Nios BSP editor and create a BSP package with the following properties.
 
@@ -147,3 +147,51 @@ int main() {
 }
 ~~~
 
+## Compiling and running the HPS software
+
+Compile the HPS software and download it, for example over an SSH connection, to the ARM on the DE1-SoC.
+Note that I am compiling this using the embedded package of Quartus 18.1; we're using Quartus 17.1 only for Platform generation.
+
+(in `cygwin`)
+~~~
+cd hsp
+make -fMakefile.arm
+~~~
+
+Next, copy the executable hpsslave to the board and run it.
+On the HPS terminal, you will see the following sequence:
+
+~~~
+Opening shared-memory channel to NIOS
+HPS runs 0
+HPS runs 1
+HPS runs 2
+HPS runs 3
+HPS runs 4
+HPS runs 5
+HPS runs 6
+...
+~~~
+
+On the nios2 terminal, you will see the following sequence:
+
+~~~
+Clear target
+NIOS runs 0 checksum 104950
+NIOS runs 1 checksum 104950
+NIOS runs 2 checksum 104950
+NIOS runs 3 checksum 104950
+NIOS runs 4 checksum 104950
+NIOS runs 5 checksum 104950
+NIOS runs 6 checksum 104950
+...
+~~~
+
+For each 'run', the following activities complete:
+
+1. The Nios initializes 100 integers (the numbers 99 to 0) in a shared array stored in onchip_memory2
+2. The Nios syncs with the HSP
+3. The HSP reads these integers and adds 1000 to each of them
+4. The HSP syncs with the Nios
+5. The Nios adds up all the integers and prints the checksum
+6. The Nios syncs with the HSP to complete the handshake
