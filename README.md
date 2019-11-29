@@ -20,3 +20,21 @@ Compile the hardware in Quartus. This results in a bitstream exampleniossdram.so
 ~~~
 nios2-configure-sof -d 2 exampleniossdram.sof
 ~~~
+
+## Compiling the Nios-II software
+
+Run the Nios BSP editor and create a BSP package with the following properties.
+
+* Connect timer_0 to the system clock and timer_1 to the timestamp timer
+* Disable the alt_load facility
+* Create an additional data segment called `.onchipdata` mapped onto the onchip_memory2
+
+Save the resulting BSP configuration and generate the library
+
+`nios2 command shell`
+~~~
+cd software
+nios2-bsp-generate-files --settings hal_bsp/settings.bsp --bsp-dir hal_bsp
+cd hal_bsp
+make
+~~~
