@@ -1,0 +1,5 @@
+mnist_infertest.exe: dataset.c functions.c loss_functions.c mnist_infertest.c neuralnet.c optimizer.c tensor.c
+	gcc -DNONIOS  dataset.c functions.c loss_functions.c mnist_infertest.c neuralnet.c optimizer.c tensor.c -o mnist_infertest.exe
+
+clean:
+	rm -f *.o *.exe
