@@ -31,10 +31,34 @@ Run the Nios BSP editor and create a BSP package with the following properties.
 
 Save the resulting BSP configuration and generate the library
 
-`nios2 command shell`
+(in `nios2 command shell`)
 ~~~
 cd software
 nios2-bsp-generate-files --settings hal_bsp/settings.bsp --bsp-dir hal_bsp
 cd hal_bsp
 make
 ~~~
+
+Next, compile the NIOS part of the NIOS-HPS software.
+
+(in `nios2 command shell`)
+~~~
+cd nios2hsp/nios
+nios2-app-generate-makefile --bsp-dir ../../hal_bsp --elf-name main.elf --src-files main.c
+make
+~~~
+
+Next, open a nios2 terminal and run the program
+
+(in `nios2 command shell`)
+~~~
+nios2-terminal
+~~~
+
+(in `nios2 command shell`)
+~~~
+nios2-download main.elf --go
+~~~
+
+To understand how the program works, it's important that you study the Nios software AND the Hps software.
+It will also help to understand how a handshake protocol works (https://rijndael.ece.vt.edu/ece4530f19/lectures/lecture09-notes.html).
